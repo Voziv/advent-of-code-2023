@@ -6,6 +6,6 @@ import (
 
 func Run() {
 	util.AssertResult("Part 1 example.txt", runPartOne("./internal/day_2/example.txt"), "8")
-	//util.AssertResult("Part 1 input.txt", runPartOne("./internal/day_2/input.txt"), "")
+	util.AssertResult("Part 1 input.txt", runPartOne("./internal/day_2/input.txt"), "2149")
 
 }
