@@ -6,64 +6,6 @@ import (
 	"strconv"
 )
 
-func isPositionAdjacentToSymbol(i int, j int, lines []string) bool {
-	// Character before
-	if positionIsSymbol(i, j-1, lines) {
-		return true
-	}
-	// Character after
-	if positionIsSymbol(i, j+1, lines) {
-		return true
-	}
-	// Character Top Left
-	if positionIsSymbol(i-1, j-1, lines) {
-		return true
-	}
-	// Character Top Middle
-	if positionIsSymbol(i-1, j, lines) {
-		return true
-	}
-	// Character Top Right
-	if positionIsSymbol(i-1, j+1, lines) {
-		return true
-	}
-	// Character Bottom Left
-	if positionIsSymbol(i+1, j-1, lines) {
-		return true
-	}
-	// Character Bottom Middle
-	if positionIsSymbol(i+1, j, lines) {
-		return true
-	}
-	// Character Bottom Right
-	if positionIsSymbol(i+1, j+1, lines) {
-		return true
-	}
-
-	return false
-}
-func positionIsSymbol(i int, j int, lines []string) bool {
-	if i < 0 || i >= len(lines) {
-		return false
-	}
-
-	if j < 0 || j >= len(lines[i]) {
-		return false
-	}
-
-	character := lines[i][j : j+1]
-
-	if character == "." {
-		return false
-	}
-
-	if isDigit(character) {
-		return false
-	}
-
-	return true
-}
-
 func runPartOne(inputFileName string) string {
 	lines := util.GetFileContents(inputFileName)
 
@@ -104,4 +46,63 @@ func castToNumber(input string) int {
 		panic(err)
 	}
 	return number
+}
+
+func isPositionAdjacentToSymbol(i int, j int, lines []string) bool {
+	// Character before
+	if positionIsSymbol(i, j-1, lines) {
+		return true
+	}
+	// Character after
+	if positionIsSymbol(i, j+1, lines) {
+		return true
+	}
+	// Character Top Left
+	if positionIsSymbol(i-1, j-1, lines) {
+		return true
+	}
+	// Character Top Middle
+	if positionIsSymbol(i-1, j, lines) {
+		return true
+	}
+	// Character Top Right
+	if positionIsSymbol(i-1, j+1, lines) {
+		return true
+	}
+	// Character Bottom Left
+	if positionIsSymbol(i+1, j-1, lines) {
+		return true
+	}
+	// Character Bottom Middle
+	if positionIsSymbol(i+1, j, lines) {
+		return true
+	}
+	// Character Bottom Right
+	if positionIsSymbol(i+1, j+1, lines) {
+		return true
+	}
+
+	return false
+}
+
+func positionIsSymbol(i int, j int, lines []string) bool {
+	if i < 0 || i >= len(lines) {
+		return false
+	}
+
+	if j < 0 || j >= len(lines[i]) {
+		return false
+	}
+
+	character := lines[i][j : j+1]
+
+	if character == "." {
+		return false
+	}
+
+	if isDigit(character) {
+		return false
+	}
+
+	return true
 }
