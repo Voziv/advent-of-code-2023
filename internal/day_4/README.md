@@ -40,6 +40,7 @@ In the above example, card 1 has five winning numbers (41, 48, 83, 86, and 17) a
 31, 17, 9, 48, and 53). Of the numbers you have, four of them (48, 83, 17, and 86) are winning numbers! That means card
 1 is worth 8 points (1 for the first match, then doubled three times for each of the three matches after the first).
 
+    Card 1 has 5 winning numbers (41, 48, 83, 86, and 17), so it is worth 8 points.
     Card 2 has two winning numbers (32 and 61), so it is worth 2 points.
     Card 3 has two winning numbers (1 and 21), so it is worth 2 points.
     Card 4 has one winning number (84), so it is worth 1 point.
