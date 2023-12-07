@@ -10,20 +10,12 @@ func runPartOne(inputFileName string) string {
 	lines := util.GetFileContents(inputFileName)
 
 	sum := 0
+	cards := map[int]*Card{}
 	for _, line := range lines {
-		_, results, _ := strings.Cut(line, ": ")
-		winningNumberPart, cardNumberPart, _ := strings.Cut(results, "|")
-		winningNumbers := parseIntoNumbers(winningNumberPart)
-		cardNumbers := parseIntoNumbers(cardNumberPart)
+		card := parseLineIntoCard(line)
+		cards[card.Id()] = card
 
-		matches := 0
-		for _, cardNumber := range cardNumbers {
-			for _, winningNumber := range winningNumbers {
-				if cardNumber == winningNumber {
-					matches++
-				}
-			}
-		}
+		matches := card.Matches()
 
 		total := 0
 		if matches > 0 {
@@ -35,8 +27,8 @@ func runPartOne(inputFileName string) string {
 		}
 
 		sum += total
-
 	}
+
 	return strconv.Itoa(sum)
 }
 
