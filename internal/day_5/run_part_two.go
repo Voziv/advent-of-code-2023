@@ -8,51 +8,59 @@ import (
 	"strings"
 )
 
+type Conversion struct {
+	length           int
+	destinationStart int
+	sourceStart      int
+}
+
+type SeedRange struct {
+	start  int
+	length int
+}
+
 func runPartTwo(inputFileName string) string {
 	lines := util.GetFileContents(inputFileName)
 
-	var inputMaps = map[string][][]int{}
+	var inputMaps = map[int][][]int{}
 	var seeds []int
-	var currentHeader = ""
-	var foundHeading = false
+	var currentCategory = -1
 
 	for _, line := range lines {
-		foundHeading = false
-		if strings.Contains(line, SEEDS_HEADER) {
+		if strings.Contains(line, SeedsHeading) {
 			seeds = expandSeeds(parseNumbersFromInput(line))
 			continue
-		}
-
-		if line == "" {
-			currentHeader = ""
-			continue
-		}
-
-		for _, heading := range headings {
-			if strings.Contains(line, heading) {
-				currentHeader = heading
-				foundHeading = true
-				break
+		} else if strings.Contains(line, MapHeading) {
+			for heading, category := range mapHeadingsToCategories {
+				if strings.Contains(line, heading) {
+					currentCategory = category
+					break
+				}
 			}
-		}
 
-		if foundHeading {
+			if currentCategory == -1 {
+				panic("No heading found for line " + line)
+			}
+
+			continue
+		} else if line == "" {
+			currentCategory = -1
 			continue
 		}
 
-		inputMaps[currentHeader] = append(inputMaps[currentHeader], parseNumbersFromInput(line))
+		inputMaps[currentCategory] = append(inputMaps[currentCategory], parseNumbersFromInput(line))
 	}
 
 	var locationNumbers []int
 
 	for _, seed := range seeds {
-		soilNumber := convertUsingMap(seed, inputMaps[SEED_TO_SOIL_HEADER])
-		fertilizerNumber := convertUsingMap(soilNumber, inputMaps[SOIL_TO_FERTILIZER_HEADER])
-		waterNumber := convertUsingMap(fertilizerNumber, inputMaps[FERTILIZER_TO_WATER_HEADER])
-		lightNumber := convertUsingMap(waterNumber, inputMaps[WATER_TO_LIGHT_HEADER])
-		temperatureNumber := convertUsingMap(lightNumber, inputMaps[LIGHT_TO_TEMPERATURE_HEADER])
-		humidityNumber := convertUsingMap(temperatureNumber, inputMaps[TEMPERATURE_TO_HUMIDITY_HEADER])
-		locationNumber := convertUsingMap(humidityNumber, inputMaps[HUMIDITY_TO_LOCATION_HEADER])
+		soilNumber := convertUsingMap(seed, inputMaps[SEED_TO_SOIL])
+		fertilizerNumber := convertUsingMap(soilNumber, inputMaps[SOIL_TO_FERTILIZER])
+		waterNumber := convertUsingMap(fertilizerNumber, inputMaps[FERTILIZER_TO_WATER])
+		lightNumber := convertUsingMap(waterNumber, inputMaps[WATER_TO_LIGHT])
+		temperatureNumber := convertUsingMap(lightNumber, inputMaps[LIGHT_TO_TEMPERATURE])
+		humidityNumber := convertUsingMap(temperatureNumber, inputMaps[TEMPERATURE_TO_HUMIDITY])
+		locationNumber := convertUsingMap(humidityNumber, inputMaps[HUMIDITY_TO_LOCATION])
 		locationNumbers = append(locationNumbers, locationNumber)
 	}
 

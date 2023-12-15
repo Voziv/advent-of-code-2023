@@ -8,71 +8,70 @@ import (
 )
 
 const (
-	SEEDS_HEADER                   = "seeds:"
-	SEED_TO_SOIL_HEADER            = "seed-to-soil map:"
-	SOIL_TO_FERTILIZER_HEADER      = "soil-to-fertilizer map:"
-	FERTILIZER_TO_WATER_HEADER     = "fertilizer-to-water map:"
-	WATER_TO_LIGHT_HEADER          = "water-to-light map:"
-	LIGHT_TO_TEMPERATURE_HEADER    = "light-to-temperature map:"
-	TEMPERATURE_TO_HUMIDITY_HEADER = "temperature-to-humidity map:"
-	HUMIDITY_TO_LOCATION_HEADER    = "humidity-to-location map:"
+	SEED_TO_SOIL            = 1
+	SOIL_TO_FERTILIZER      = 2
+	FERTILIZER_TO_WATER     = 3
+	WATER_TO_LIGHT          = 4
+	LIGHT_TO_TEMPERATURE    = 5
+	TEMPERATURE_TO_HUMIDITY = 6
+	HUMIDITY_TO_LOCATION    = 7
 )
 
-var headings = []string{
-	SEED_TO_SOIL_HEADER,
-	SOIL_TO_FERTILIZER_HEADER,
-	FERTILIZER_TO_WATER_HEADER,
-	WATER_TO_LIGHT_HEADER,
-	LIGHT_TO_TEMPERATURE_HEADER,
-	TEMPERATURE_TO_HUMIDITY_HEADER,
-	HUMIDITY_TO_LOCATION_HEADER,
+const SeedsHeading = "seeds:"
+const MapHeading = "map:"
+
+var mapHeadingsToCategories = map[string]int{
+	"seed-to-soil":            SEED_TO_SOIL,
+	"soil-to-fertilizer":      SOIL_TO_FERTILIZER,
+	"fertilizer-to-water":     FERTILIZER_TO_WATER,
+	"water-to-light":          WATER_TO_LIGHT,
+	"light-to-temperature":    LIGHT_TO_TEMPERATURE,
+	"temperature-to-humidity": TEMPERATURE_TO_HUMIDITY,
+	"humidity-to-location":    HUMIDITY_TO_LOCATION,
 }
 
 func runPartOne(inputFileName string) string {
 	lines := util.GetFileContents(inputFileName)
 
-	var inputMaps = map[string][][]int{}
+	var inputMaps = map[int][][]int{}
 	var seeds []int
-	var currentHeader = ""
-	var foundHeading = false
+	var currentCategory = -1
 
 	for _, line := range lines {
-		foundHeading = false
-		if strings.Contains(line, SEEDS_HEADER) {
+		if strings.Contains(line, SeedsHeading) {
 			seeds = parseNumbersFromInput(line)
 			continue
-		}
-
-		if line == "" {
-			currentHeader = ""
-			continue
-		}
-
-		for _, heading := range headings {
-			if strings.Contains(line, heading) {
-				currentHeader = heading
-				foundHeading = true
-				break
+		} else if strings.Contains(line, MapHeading) {
+			for heading, category := range mapHeadingsToCategories {
+				if strings.Contains(line, heading) {
+					currentCategory = category
+					break
+				}
 			}
-		}
 
-		if foundHeading {
+			if currentCategory == -1 {
+				panic("No heading found for line " + line)
+			}
+
+			continue
+		} else if line == "" {
+			currentCategory = -1
 			continue
 		}
 
-		inputMaps[currentHeader] = append(inputMaps[currentHeader], parseNumbersFromInput(line))
+		inputMaps[currentCategory] = append(inputMaps[currentCategory], parseNumbersFromInput(line))
 	}
 
 	var locationNumbers []int
 
 	for _, seed := range seeds {
-		soilNumber := convertUsingMap(seed, inputMaps[SEED_TO_SOIL_HEADER])
-		fertilizerNumber := convertUsingMap(soilNumber, inputMaps[SOIL_TO_FERTILIZER_HEADER])
-		waterNumber := convertUsingMap(fertilizerNumber, inputMaps[FERTILIZER_TO_WATER_HEADER])
-		lightNumber := convertUsingMap(waterNumber, inputMaps[WATER_TO_LIGHT_HEADER])
-		temperatureNumber := convertUsingMap(lightNumber, inputMaps[LIGHT_TO_TEMPERATURE_HEADER])
-		humidityNumber := convertUsingMap(temperatureNumber, inputMaps[TEMPERATURE_TO_HUMIDITY_HEADER])
-		locationNumber := convertUsingMap(humidityNumber, inputMaps[HUMIDITY_TO_LOCATION_HEADER])
+		soilNumber := convertUsingMap(seed, inputMaps[SEED_TO_SOIL])
+		fertilizerNumber := convertUsingMap(soilNumber, inputMaps[SOIL_TO_FERTILIZER])
+		waterNumber := convertUsingMap(fertilizerNumber, inputMaps[FERTILIZER_TO_WATER])
+		lightNumber := convertUsingMap(waterNumber, inputMaps[WATER_TO_LIGHT])
+		temperatureNumber := convertUsingMap(lightNumber, inputMaps[LIGHT_TO_TEMPERATURE])
+		humidityNumber := convertUsingMap(temperatureNumber, inputMaps[TEMPERATURE_TO_HUMIDITY])
+		locationNumber := convertUsingMap(humidityNumber, inputMaps[HUMIDITY_TO_LOCATION])
 		locationNumbers = append(locationNumbers, locationNumber)
 	}
 
