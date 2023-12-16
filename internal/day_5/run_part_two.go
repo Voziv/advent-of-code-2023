@@ -3,26 +3,23 @@ package day_5
 import (
 	"fmt"
 	"github.com/voziv/advent-of-code-2023/internal/util"
-	"sort"
 	"strconv"
 	"strings"
 )
 
-type SeedRange struct {
-	start  int
-	length int
-}
-
 func runPartTwo(inputFileName string) string {
 	lines := util.GetFileContents(inputFileName)
 
-	var inputMaps = map[int][]*Conversion{}
-	var seeds []int
+	var inputMaps = map[int][]*Converter{}
+	var seedRanges []*SeedRange
 	var currentCategory = -1
 
 	for _, line := range lines {
 		if strings.Contains(line, SeedsHeading) {
-			seeds = expandSeeds(parseNumbersFromInput(line))
+			seedRanges = NewSeedRangesFromInput(line)
+			for i, seedRange := range seedRanges {
+				fmt.Printf("#%d: %d to %d\n", i, seedRange.start, seedRange.end)
+			}
 			continue
 		} else if strings.Contains(line, MapHeading) {
 			for heading, category := range mapHeadingsToCategories {
@@ -45,35 +42,85 @@ func runPartTwo(inputFileName string) string {
 		inputMaps[currentCategory] = append(inputMaps[currentCategory], NewConversionFromInput(line))
 	}
 
-	var locationNumbers []int
+	fmt.Println("SeedToSoil")
+	ranges := convertRange(seedRanges, inputMaps[SeedToSoil])
+	fmt.Println("SoilToFertilizer")
+	ranges = convertRange(ranges, inputMaps[SoilToFertilizer])
+	fmt.Println("FertilizerToWater")
+	ranges = convertRange(ranges, inputMaps[FertilizerToWater])
+	fmt.Println("WaterToLight")
+	ranges = convertRange(ranges, inputMaps[WaterToLight])
+	fmt.Println("LightToTemperature")
+	ranges = convertRange(ranges, inputMaps[LightToTemperature])
+	fmt.Println("TemperatureToHumidity")
+	ranges = convertRange(ranges, inputMaps[TemperatureToHumidity])
+	fmt.Println("HumidityToLocation")
+	ranges = convertRange(ranges, inputMaps[HumidityToLocation])
 
-	for _, seed := range seeds {
-		soilNumber := convertUsingMap(seed, inputMaps[SEED_TO_SOIL])
-		fertilizerNumber := convertUsingMap(soilNumber, inputMaps[SOIL_TO_FERTILIZER])
-		waterNumber := convertUsingMap(fertilizerNumber, inputMaps[FERTILIZER_TO_WATER])
-		lightNumber := convertUsingMap(waterNumber, inputMaps[WATER_TO_LIGHT])
-		temperatureNumber := convertUsingMap(lightNumber, inputMaps[LIGHT_TO_TEMPERATURE])
-		humidityNumber := convertUsingMap(temperatureNumber, inputMaps[TEMPERATURE_TO_HUMIDITY])
-		locationNumber := convertUsingMap(humidityNumber, inputMaps[HUMIDITY_TO_LOCATION])
-		locationNumbers = append(locationNumbers, locationNumber)
-	}
-
-	sort.Slice(locationNumbers, func(i, j int) bool {
-		return locationNumbers[i] < locationNumbers[j]
-	})
-
-	return strconv.Itoa(locationNumbers[0])
-}
-
-func expandSeeds(seeds []int) []int {
-	expandedSeeds := []int{}
-	fmt.Println(seeds)
-	for i := 0; i < len(seeds); i += 2 {
-		fmt.Printf("Seed Start: %d, Seed Range: %d\n", seeds[i], seeds[i+1])
-		for j := 0; j < seeds[i+1]; j++ {
-			expandedSeeds = append(expandedSeeds, seeds[i]+j)
+	var lowestLocation = 0
+	for _, r := range ranges {
+		if r.start < lowestLocation || lowestLocation == 0 {
+			lowestLocation = r.start
 		}
 	}
 
-	return expandedSeeds
+	return strconv.Itoa(lowestLocation)
+}
+
+func convertRange(ranges []*SeedRange, converters []*Converter) []*SeedRange {
+	fmt.Printf("Comparing %d ranges against %d converters\n", len(ranges), len(converters))
+
+	var newRanges []*SeedRange
+	for convIndex, c := range converters {
+		var rangesToIterate []*SeedRange
+		copy(rangesToIterate, ranges)
+		fmt.Printf("Ranges to iterate: %d\n", len(rangesToIterate))
+
+		for i, r := range rangesToIterate {
+			fmt.Printf("Range: %d to %d\t|\tConv#%d: %d to %d\t m:%d = \t", r.start, r.end, convIndex, c.sourceStart, c.sourceEnd, c.modifier)
+			// Range does not match the converter
+			if c.sourceStart > r.end || c.sourceEnd < r.start {
+				fmt.Println("Range does not match converter")
+				continue
+			}
+
+			if r.start >= c.sourceStart && r.end <= c.sourceEnd {
+				// Range is entirely within the converter
+				fmt.Println("Whole range fits the converter")
+				newRanges = append(newRanges, NewSeedRange(r.start+c.modifier, r.end+c.modifier))
+			} else if r.start >= c.sourceStart && r.end < c.sourceEnd {
+				// Converter only overlaps start of range
+				fmt.Println("Overlaps beginning of range")
+				newRanges = append(newRanges, NewSeedRange(r.start+c.modifier, c.destinationEnd))
+				ranges = append(ranges, NewSeedRange(c.sourceEnd+1, r.end))
+			} else if r.start < c.sourceStart && r.end <= c.sourceEnd {
+				// Converter only overlaps the end of range
+				fmt.Println("Overlaps end of range")
+
+				newRanges = append(newRanges, NewSeedRange(c.destinationStart, r.end+c.modifier))
+				ranges = append(ranges, NewSeedRange(r.start, c.sourceStart-1))
+			} else {
+				// Converter is entirely within the range
+				fmt.Println("Overlaps middle of range")
+				ranges = append(ranges, NewSeedRange(r.start, c.sourceStart-1))
+				newRanges = append(newRanges, NewSeedRange(c.destinationStart, c.destinationEnd))
+				ranges = append(ranges, NewSeedRange(c.sourceEnd+1, r.end))
+			}
+
+			ranges = remove(ranges, i)
+		}
+	}
+
+	for _, r := range ranges {
+		fmt.Printf("Appending leftover range %d to %d\n", r.start, r.end)
+		newRanges = append(newRanges, r)
+	}
+
+	fmt.Printf("New Ranges Count: %d\n", len(newRanges))
+
+	return newRanges
+}
+
+func remove(slice []*SeedRange, s int) []*SeedRange {
+	return append(slice[:s], slice[s+1:]...)
 }

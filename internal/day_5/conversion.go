@@ -11,27 +11,31 @@ import (
 // Length = 2
 // Means 98-99 will be -48 in value
 
-type Conversion struct {
+type Converter struct {
 	destinationStart int
+	destinationEnd   int
 	sourceStart      int
+	sourceEnd        int
 	length           int
 	modifier         int
 }
 
-func (c *Conversion) Length() int {
+func (c *Converter) Length() int {
 	return c.length
 }
 
-func NewConversion(destinationStart int, sourceStart int, length int) *Conversion {
-	return &Conversion{
+func NewConversion(destinationStart int, sourceStart int, length int) *Converter {
+	return &Converter{
 		destinationStart: destinationStart,
+		destinationEnd:   destinationStart + length,
 		sourceStart:      sourceStart,
+		sourceEnd:        sourceStart + length,
 		length:           length,
 		modifier:         destinationStart - sourceStart,
 	}
 }
 
-func NewConversionFromInput(input string) *Conversion {
+func NewConversionFromInput(input string) *Converter {
 	var numbers []int
 	tokens := strings.Split(input, " ")
 	for _, token := range tokens {
@@ -50,7 +54,7 @@ func NewConversionFromInput(input string) *Conversion {
 	return NewConversion(numbers[0], numbers[1], numbers[2])
 }
 
-func (c *Conversion) IsInRange(value int) bool {
+func (c *Converter) IsInRange(value int) bool {
 	if value >= c.sourceStart && value <= c.sourceStart+c.length {
 		return true
 	}
@@ -58,6 +62,6 @@ func (c *Conversion) IsInRange(value int) bool {
 	return false
 }
 
-func (c *Conversion) Modifier() int {
+func (c *Converter) Modifier() int {
 	return c.modifier
 }

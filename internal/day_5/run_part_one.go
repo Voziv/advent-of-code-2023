@@ -8,32 +8,32 @@ import (
 )
 
 const (
-	SEED_TO_SOIL            = 1
-	SOIL_TO_FERTILIZER      = 2
-	FERTILIZER_TO_WATER     = 3
-	WATER_TO_LIGHT          = 4
-	LIGHT_TO_TEMPERATURE    = 5
-	TEMPERATURE_TO_HUMIDITY = 6
-	HUMIDITY_TO_LOCATION    = 7
+	SeedToSoil            = 1
+	SoilToFertilizer      = 2
+	FertilizerToWater     = 3
+	WaterToLight          = 4
+	LightToTemperature    = 5
+	TemperatureToHumidity = 6
+	HumidityToLocation    = 7
 )
 
 const SeedsHeading = "seeds:"
 const MapHeading = "map:"
 
 var mapHeadingsToCategories = map[string]int{
-	"seed-to-soil":            SEED_TO_SOIL,
-	"soil-to-fertilizer":      SOIL_TO_FERTILIZER,
-	"fertilizer-to-water":     FERTILIZER_TO_WATER,
-	"water-to-light":          WATER_TO_LIGHT,
-	"light-to-temperature":    LIGHT_TO_TEMPERATURE,
-	"temperature-to-humidity": TEMPERATURE_TO_HUMIDITY,
-	"humidity-to-location":    HUMIDITY_TO_LOCATION,
+	"seed-to-soil":            SeedToSoil,
+	"soil-to-fertilizer":      SoilToFertilizer,
+	"fertilizer-to-water":     FertilizerToWater,
+	"water-to-light":          WaterToLight,
+	"light-to-temperature":    LightToTemperature,
+	"temperature-to-humidity": TemperatureToHumidity,
+	"humidity-to-location":    HumidityToLocation,
 }
 
 func runPartOne(inputFileName string) string {
 	lines := util.GetFileContents(inputFileName)
 
-	var inputMaps = map[int][]*Conversion{}
+	var inputMaps = map[int][]*Converter{}
 	var seeds []int
 	var currentCategory = -1
 
@@ -65,13 +65,13 @@ func runPartOne(inputFileName string) string {
 	var locationNumbers []int
 
 	for _, seed := range seeds {
-		soilNumber := convertUsingMap(seed, inputMaps[SEED_TO_SOIL])
-		fertilizerNumber := convertUsingMap(soilNumber, inputMaps[SOIL_TO_FERTILIZER])
-		waterNumber := convertUsingMap(fertilizerNumber, inputMaps[FERTILIZER_TO_WATER])
-		lightNumber := convertUsingMap(waterNumber, inputMaps[WATER_TO_LIGHT])
-		temperatureNumber := convertUsingMap(lightNumber, inputMaps[LIGHT_TO_TEMPERATURE])
-		humidityNumber := convertUsingMap(temperatureNumber, inputMaps[TEMPERATURE_TO_HUMIDITY])
-		locationNumber := convertUsingMap(humidityNumber, inputMaps[HUMIDITY_TO_LOCATION])
+		soilNumber := convertUsingMap(seed, inputMaps[SeedToSoil])
+		fertilizerNumber := convertUsingMap(soilNumber, inputMaps[SoilToFertilizer])
+		waterNumber := convertUsingMap(fertilizerNumber, inputMaps[FertilizerToWater])
+		lightNumber := convertUsingMap(waterNumber, inputMaps[WaterToLight])
+		temperatureNumber := convertUsingMap(lightNumber, inputMaps[LightToTemperature])
+		humidityNumber := convertUsingMap(temperatureNumber, inputMaps[TemperatureToHumidity])
+		locationNumber := convertUsingMap(humidityNumber, inputMaps[HumidityToLocation])
 		locationNumbers = append(locationNumbers, locationNumber)
 	}
 
@@ -82,22 +82,7 @@ func runPartOne(inputFileName string) string {
 	return strconv.Itoa(locationNumbers[0])
 }
 
-func parseNumbersFromInput(input string) []int {
-	var numbers []int
-	tokens := strings.Split(input, " ")
-	for _, token := range tokens {
-		number, err := strconv.Atoi(token)
-		if err != nil {
-			continue
-		}
-
-		numbers = append(numbers, number)
-	}
-
-	return numbers
-}
-
-func convertUsingMap(number int, conversions []*Conversion) int {
+func convertUsingMap(number int, conversions []*Converter) int {
 	for _, conversion := range conversions {
 		if conversion.IsInRange(number) {
 			return number + conversion.Modifier()
