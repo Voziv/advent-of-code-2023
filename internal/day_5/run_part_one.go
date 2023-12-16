@@ -33,7 +33,7 @@ var mapHeadingsToCategories = map[string]int{
 func runPartOne(inputFileName string) string {
 	lines := util.GetFileContents(inputFileName)
 
-	var inputMaps = map[int][][]int{}
+	var inputMaps = map[int][]*Conversion{}
 	var seeds []int
 	var currentCategory = -1
 
@@ -59,7 +59,7 @@ func runPartOne(inputFileName string) string {
 			continue
 		}
 
-		inputMaps[currentCategory] = append(inputMaps[currentCategory], parseNumbersFromInput(line))
+		inputMaps[currentCategory] = append(inputMaps[currentCategory], NewConversionFromInput(line))
 	}
 
 	var locationNumbers []int
@@ -97,16 +97,10 @@ func parseNumbersFromInput(input string) []int {
 	return numbers
 }
 
-func convertUsingMap(number int, conversionRanges [][]int) int {
-	for _, conversionRange := range conversionRanges {
-		length := conversionRange[2]
-		destinationRangeStart := conversionRange[0]
-		// destinationRangeEnd := destinationRangeStart + length
-		sourceRangeStart := conversionRange[1]
-		sourceRangeEnd := sourceRangeStart + length
-
-		if number >= sourceRangeStart && number <= sourceRangeEnd {
-			return number - sourceRangeStart + destinationRangeStart
+func convertUsingMap(number int, conversions []*Conversion) int {
+	for _, conversion := range conversions {
+		if conversion.IsInRange(number) {
+			return number + conversion.Modifier()
 		}
 	}
 

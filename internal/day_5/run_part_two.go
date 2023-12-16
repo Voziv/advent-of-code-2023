@@ -8,12 +8,6 @@ import (
 	"strings"
 )
 
-type Conversion struct {
-	length           int
-	destinationStart int
-	sourceStart      int
-}
-
 type SeedRange struct {
 	start  int
 	length int
@@ -22,7 +16,7 @@ type SeedRange struct {
 func runPartTwo(inputFileName string) string {
 	lines := util.GetFileContents(inputFileName)
 
-	var inputMaps = map[int][][]int{}
+	var inputMaps = map[int][]*Conversion{}
 	var seeds []int
 	var currentCategory = -1
 
@@ -48,7 +42,7 @@ func runPartTwo(inputFileName string) string {
 			continue
 		}
 
-		inputMaps[currentCategory] = append(inputMaps[currentCategory], parseNumbersFromInput(line))
+		inputMaps[currentCategory] = append(inputMaps[currentCategory], NewConversionFromInput(line))
 	}
 
 	var locationNumbers []int
