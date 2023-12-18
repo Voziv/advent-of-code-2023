@@ -5,29 +5,33 @@ import (
 	"strings"
 )
 
-type day8Answer struct {
+type result struct {
 	partOne int
 	partTwo int
 }
 
 func Run() {
-	util.AssertResult("example.txt", run("./internal/day8/example.txt"), day8Answer{
+	util.AssertResult("example.txt", run("./internal/day8/example.txt"), result{
 		partOne: 2,
 		partTwo: 0,
 	})
 
-	util.AssertResult("example2.txt", run("./internal/day8/example2.txt"), day8Answer{
+	util.AssertResult("example2.txt", run("./internal/day8/example2.txt"), result{
 		partOne: 6,
 		partTwo: 0,
 	})
 
-	util.AssertResult("input.txt", run("./internal/day8/input.txt"), day8Answer{
+	util.AssertResult("input.txt", run("./internal/day8/input.txt"), result{
 		partOne: 19637,
 		partTwo: 0,
 	})
 }
 
-func run(inputFileName string) day8Answer {
+func run(inputFileName string) result {
+	result := result{
+		partOne: 0,
+		partTwo: 0,
+	}
 	lines := util.GetFileContents(inputFileName)
 
 	directions := strings.Split(lines[0], "")
@@ -50,14 +54,13 @@ func run(inputFileName string) day8Answer {
 		}{left: left, right: right}
 	}
 
-	stepsNeededWhileFollowingDirections := 0
 	foundZZZ := false
 	currentPosition := "AAA"
 
 	for foundZZZ == false {
 		for _, direction := range directions {
-			stepsNeededWhileFollowingDirections++
-			if stepsNeededWhileFollowingDirections > 1000000 {
+			result.partOne++
+			if result.partOne > 1000000 {
 				panic("Steps exceeded 1,000,000")
 			}
 
@@ -74,8 +77,5 @@ func run(inputFileName string) day8Answer {
 		}
 	}
 
-	return day8Answer{
-		partOne: stepsNeededWhileFollowingDirections,
-		partTwo: 0,
-	}
+	return result
 }
