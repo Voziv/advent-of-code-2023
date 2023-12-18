@@ -1,25 +1,17 @@
 package day_5
 
-import "sort"
+import "fmt"
 
 type SeedRange struct {
-	start  int
-	length int
-	end    int
+	key   string
+	start int
+	end   int
 }
 
-func NewSeedRange(start int, length int) *SeedRange {
-	return &SeedRange{start: start, length: length, end: start + length}
-}
-
-func NewSeedRangesFromInput(input string) []*SeedRange {
-	var seedRanges []*SeedRange
-	numbers := parseNumbersFromInput(input)
-	for i := 0; i < len(numbers); i += 2 {
-		seedRanges = append(seedRanges, NewSeedRange(numbers[i], numbers[i+1]))
+func NewSeedRange(start int, end int) *SeedRange {
+	return &SeedRange{
+		key:   fmt.Sprintf("%d-%d", start, end),
+		start: start,
+		end:   end,
 	}
-	sort.Slice(seedRanges, func(i, j int) bool {
-		return seedRanges[i].start < seedRanges[j].start
-	})
-	return seedRanges
 }
