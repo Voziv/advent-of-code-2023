@@ -6,18 +6,18 @@ import (
 	"strings"
 )
 
-type day2Answer struct {
+type result struct {
 	partOne int
 	partTwo int
 }
 
 func Run() {
-	util.AssertResult("example.txt", run("./internal/day2/example.txt"), day2Answer{
+	util.AssertResult("example.txt", run("./internal/day2/example.txt"), result{
 		partOne: 8,
 		partTwo: 2286,
 	})
 
-	util.AssertResult("input.txt", run("./internal/day2/input.txt"), day2Answer{
+	util.AssertResult("input.txt", run("./internal/day2/input.txt"), result{
 		partOne: 2149,
 		partTwo: 71274,
 	})
@@ -38,10 +38,10 @@ var bagOfCubes = map[string]int{
 	"red":   12,
 }
 
-func run(inputFileName string) day2Answer {
+func run(inputFileName string) result {
 
 	lines := util.GetFileContents(inputFileName)
-	answer := day2Answer{
+	result := result{
 		partOne: 0,
 		partTwo: 0,
 	}
@@ -51,13 +51,13 @@ func run(inputFileName string) day2Answer {
 
 		isValidGame := validateGame(game)
 		if isValidGame {
-			answer.partOne += game.Id
+			result.partOne += game.Id
 		}
 
-		answer.partTwo += getPowerOfGame(game)
+		result.partTwo += getPowerOfGame(game)
 	}
 
-	return answer
+	return result
 }
 
 func validateGame(game *Game) bool {
