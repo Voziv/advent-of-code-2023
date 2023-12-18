@@ -9,6 +9,7 @@ import (
 	"github.com/voziv/advent-of-code-2023/internal/day5"
 	"github.com/voziv/advent-of-code-2023/internal/day6"
 	"github.com/voziv/advent-of-code-2023/internal/day7"
+	"github.com/voziv/advent-of-code-2023/internal/day8"
 	"os"
 )
 
@@ -21,6 +22,7 @@ var DayFunctions = map[string]func(){
 	"5": day5.Run,
 	"6": day6.Run,
 	"7": day7.Run,
+	"8": day8.Run,
 }
 
 func main() {
