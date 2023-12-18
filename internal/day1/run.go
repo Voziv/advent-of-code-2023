@@ -6,7 +6,7 @@ import (
 	"strconv"
 )
 
-type day1Answer struct {
+type result struct {
 	partOne int
 	partTwo int
 }
@@ -20,41 +20,41 @@ var wordReplacements = map[string]string{
 }
 
 func Run() {
-	util.AssertResult("example.txt", run("./internal/day1/example.txt"), day1Answer{
+	util.AssertResult("example.txt", run("./internal/day1/example.txt"), result{
 		partOne: 142,
 		partTwo: 142,
 	})
 
-	util.AssertResult("example2.txt", run("./internal/day1/example2.txt"), day1Answer{
+	util.AssertResult("example2.txt", run("./internal/day1/example2.txt"), result{
 		partOne: 209,
 		partTwo: 281,
 	})
 
-	util.AssertResult("input.txt", run("./internal/day1/input.txt"), day1Answer{
+	util.AssertResult("input.txt", run("./internal/day1/input.txt"), result{
 		partOne: 54953,
 		partTwo: 53868,
 	})
 }
 
-func run(inputFileName string) day1Answer {
+func run(inputFileName string) result {
 	lines := util.GetFileContents(inputFileName)
 
-	answer := day1Answer{
+	result := result{
 		partOne: 0,
 		partTwo: 0,
 	}
 
 	for _, line := range lines {
 		partOneValue := parseCalibrationDigits(line)
-		answer.partOne += partOneValue
+		result.partOne += partOneValue
 
 		partTwoValue := parseCalibrationNumber(line)
-		answer.partTwo += partTwoValue
+		result.partTwo += partTwoValue
 
 		//fmt.Printf("%-20s\tP1: %d\t P2: %d\n", line, partOneValue, partTwoValue)
 	}
 
-	return answer
+	return result
 }
 
 func parseCalibrationDigits(input string) int {
