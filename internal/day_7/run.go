@@ -9,5 +9,5 @@ func Run() {
 	util.AssertResult("Part 1 input.txt", runPartOne("./internal/day_7/input.txt"), "253910319")
 
 	util.AssertResult("Part 2 example.txt", runPartTwo("./internal/day_7/example.txt"), "5905")
-	util.AssertResult("Part 2 input.txt", runPartTwo("./internal/day_7/input.txt"), "0")
+	util.AssertResult("Part 2 input.txt", runPartTwo("./internal/day_7/input.txt"), "254083736")
 }
