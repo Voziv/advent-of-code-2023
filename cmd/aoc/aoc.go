@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"github.com/voziv/advent-of-code-2023/internal/day0"
 	"github.com/voziv/advent-of-code-2023/internal/day1"
 	"github.com/voziv/advent-of-code-2023/internal/day2"
@@ -11,25 +12,47 @@ import (
 	"github.com/voziv/advent-of-code-2023/internal/day7"
 	"github.com/voziv/advent-of-code-2023/internal/day8"
 	"os"
+	"strconv"
 )
 
-var DayFunctions = map[string]func(){
-	"0": day0.Run,
-	"1": day1.Run,
-	"2": day2.Run,
-	"3": day3.Run,
-	"4": day4.Run,
-	"5": day5.Run,
-	"6": day6.Run,
-	"7": day7.Run,
-	"8": day8.Run,
+var DayFunctions = []func(){
+	day0.Run,
+	day1.Run,
+	day2.Run,
+	day3.Run,
+	day4.Run,
+	day5.Run,
+	day6.Run,
+	day7.Run,
+	day8.Run,
 }
 
 func main() {
-	runner, ok := DayFunctions[os.Args[1]]
-	if !ok {
-		panic("We don't have that day coded!")
+	if os.Args[1] == "all" {
+		fmt.Println("Running All Days")
+		for dayNumber, runner := range DayFunctions {
+			fmt.Printf("\n########################################\n")
+			fmt.Printf("Running Day %d\n", dayNumber)
+			fmt.Printf("########################################\n")
+			runner()
+		}
+	} else {
+		dayNumber, err := strconv.Atoi(os.Args[1])
+
+		if err != nil {
+			fmt.Println("You must provide a valid day number")
+			os.Exit(1)
+		}
+
+		if dayNumber > len(DayFunctions) {
+			fmt.Println("We don't have that day coded!")
+			os.Exit(1)
+		}
+
+		fmt.Printf("\n########################################\n")
+		fmt.Printf("Running Day %s\n", os.Args[1])
+		fmt.Printf("########################################\n")
+		DayFunctions[dayNumber]()
 	}
 
-	runner()
 }
