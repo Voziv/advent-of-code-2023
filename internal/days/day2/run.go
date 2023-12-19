@@ -12,12 +12,12 @@ type result struct {
 }
 
 func Run() {
-	util.AssertResult("example.txt", run("./internal/day2/example.txt"), result{
+	util.AssertResult("example.txt", run("./internal/days/day2/example.txt"), result{
 		partOne: 8,
 		partTwo: 2286,
 	})
 
-	util.AssertResult("input.txt", run("./internal/day2/input.txt"), result{
+	util.AssertResult("input.txt", run("./internal/days/day2/input.txt"), result{
 		partOne: 2149,
 		partTwo: 71274,
 	})

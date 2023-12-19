@@ -10,12 +10,12 @@ type result struct {
 }
 
 func Run() {
-	util.AssertResult("example.txt", run("./internal/day0/example.txt"), result{
+	util.AssertResult("example.txt", run("./internal/days/day0/example.txt"), result{
 		partOne: 0,
 		partTwo: 0,
 	})
 
-	util.AssertResult("input.txt", run("./internal/day0/input.txt"), result{
+	util.AssertResult("input.txt", run("./internal/days/day0/input.txt"), result{
 		partOne: 0,
 		partTwo: 0,
 	})
