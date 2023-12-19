@@ -1,4 +1,4 @@
-package day5
+package day05
 
 // Map: 50 98 2
 // Dest = 50

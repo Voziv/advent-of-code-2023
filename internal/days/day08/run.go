@@ -1,4 +1,4 @@
-package day8
+package day08
 
 import (
 	"github.com/voziv/advent-of-code-2023/internal/math"
@@ -12,12 +12,12 @@ type result struct {
 }
 
 func Run() {
-	util.AssertResult("P1: example.txt", run("./internal/days/day8/example.txt"), result{steps: 2})
-	util.AssertResult("P1: example2.txt", run("./internal/days/day8/example2.txt"), result{steps: 6})
-	util.AssertResult("P1: input.txt", run("./internal/days/day8/input.txt"), result{steps: 19637})
+	util.AssertResult("P1: example.txt", run("./internal/days/day08/example.txt"), result{steps: 2})
+	util.AssertResult("P1: example2.txt", run("./internal/days/day08/example2.txt"), result{steps: 6})
+	util.AssertResult("P1: input.txt", run("./internal/days/day08/input.txt"), result{steps: 19637})
 
-	util.AssertResult("P2: example3.txt", solveLikeAGhost("./internal/days/day8/example3.txt"), result{steps: 6})
-	util.AssertResult("P2: input.txt", solveLikeAGhost("./internal/days/day8/input.txt"), result{steps: 8811050362409})
+	util.AssertResult("P2: example3.txt", solveLikeAGhost("./internal/days/day08/example3.txt"), result{steps: 6})
+	util.AssertResult("P2: input.txt", solveLikeAGhost("./internal/days/day08/input.txt"), result{steps: 8811050362409})
 }
 
 func run(inputFileName string) result {

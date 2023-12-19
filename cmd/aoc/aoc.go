@@ -2,8 +2,16 @@ package main
 
 import (
 	"fmt"
-	"github.com/voziv/advent-of-code-2023/internal/days/day0"
-	"github.com/voziv/advent-of-code-2023/internal/days/day1"
+	"github.com/voziv/advent-of-code-2023/internal/days/day00"
+	"github.com/voziv/advent-of-code-2023/internal/days/day01"
+	"github.com/voziv/advent-of-code-2023/internal/days/day02"
+	"github.com/voziv/advent-of-code-2023/internal/days/day03"
+	"github.com/voziv/advent-of-code-2023/internal/days/day04"
+	"github.com/voziv/advent-of-code-2023/internal/days/day05"
+	"github.com/voziv/advent-of-code-2023/internal/days/day06"
+	"github.com/voziv/advent-of-code-2023/internal/days/day07"
+	"github.com/voziv/advent-of-code-2023/internal/days/day08"
+	"github.com/voziv/advent-of-code-2023/internal/days/day09"
 	"github.com/voziv/advent-of-code-2023/internal/days/day10"
 	"github.com/voziv/advent-of-code-2023/internal/days/day11"
 	"github.com/voziv/advent-of-code-2023/internal/days/day12"
@@ -14,35 +22,27 @@ import (
 	"github.com/voziv/advent-of-code-2023/internal/days/day17"
 	"github.com/voziv/advent-of-code-2023/internal/days/day18"
 	"github.com/voziv/advent-of-code-2023/internal/days/day19"
-	"github.com/voziv/advent-of-code-2023/internal/days/day2"
 	"github.com/voziv/advent-of-code-2023/internal/days/day20"
 	"github.com/voziv/advent-of-code-2023/internal/days/day21"
 	"github.com/voziv/advent-of-code-2023/internal/days/day22"
 	"github.com/voziv/advent-of-code-2023/internal/days/day23"
 	"github.com/voziv/advent-of-code-2023/internal/days/day24"
 	"github.com/voziv/advent-of-code-2023/internal/days/day25"
-	"github.com/voziv/advent-of-code-2023/internal/days/day3"
-	"github.com/voziv/advent-of-code-2023/internal/days/day4"
-	"github.com/voziv/advent-of-code-2023/internal/days/day5"
-	"github.com/voziv/advent-of-code-2023/internal/days/day6"
-	"github.com/voziv/advent-of-code-2023/internal/days/day7"
-	"github.com/voziv/advent-of-code-2023/internal/days/day8"
-	"github.com/voziv/advent-of-code-2023/internal/days/day9"
 	"os"
 	"strconv"
 )
 
 var DayFunctions = []func(){
-	day0.Run,
-	day1.Run,
-	day2.Run,
-	day3.Run,
-	day4.Run,
-	day5.Run,
-	day6.Run,
-	day7.Run,
-	day8.Run,
-	day9.Run,
+	day00.Run,
+	day01.Run,
+	day02.Run,
+	day03.Run,
+	day04.Run,
+	day05.Run,
+	day06.Run,
+	day07.Run,
+	day08.Run,
+	day09.Run,
 	day10.Run,
 	day11.Run,
 	day12.Run,

@@ -1,4 +1,4 @@
-package day9
+package day09
 
 import (
 	"fmt"
@@ -10,11 +10,11 @@ type result struct {
 }
 
 func Run() {
-	util.AssertResult("example.txt", run("./internal/days/day9/example.txt"), result{
+	util.AssertResult("example.txt", run("./internal/days/day09/example.txt"), result{
 		partOne: 114,
 	})
 
-	util.AssertResult("input.txt", run("./internal/days/day9/input.txt"), result{
+	util.AssertResult("input.txt", run("./internal/days/day09/input.txt"), result{
 		partOne: 2174807968,
 	})
 }

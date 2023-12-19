@@ -1,4 +1,4 @@
-package day1
+package day01
 
 import (
 	"errors"
@@ -20,17 +20,17 @@ var wordReplacements = map[string]string{
 }
 
 func Run() {
-	util.AssertResult("example.txt", run("./internal/days/day1/example.txt"), result{
+	util.AssertResult("example.txt", run("./internal/days/day01/example.txt"), result{
 		partOne: 142,
 		partTwo: 142,
 	})
 
-	util.AssertResult("example2.txt", run("./internal/days/day1/example2.txt"), result{
+	util.AssertResult("example2.txt", run("./internal/days/day01/example2.txt"), result{
 		partOne: 209,
 		partTwo: 281,
 	})
 
-	util.AssertResult("input.txt", run("./internal/days/day1/input.txt"), result{
+	util.AssertResult("input.txt", run("./internal/days/day01/input.txt"), result{
 		partOne: 54953,
 		partTwo: 53868,
 	})
