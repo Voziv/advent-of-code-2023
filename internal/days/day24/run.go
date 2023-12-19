@@ -1,4 +1,4 @@
-package day0
+package day24
 
 import (
 	"github.com/voziv/advent-of-code-2023/internal/util"
@@ -9,11 +9,11 @@ type result struct {
 }
 
 func Run() {
-	util.AssertResult("example.txt", run("./internal/days/day0/example.txt"), result{
+	util.AssertResult("example.txt", run("./internal/days/day24/example.txt"), result{
 		partOne: 0,
 	})
 
-	util.AssertResult("input.txt", run("./internal/days/day0/input.txt"), result{
+	util.AssertResult("input.txt", run("./internal/days/day24/input.txt"), result{
 		partOne: 0,
 	})
 }
