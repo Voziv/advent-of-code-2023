@@ -4,6 +4,7 @@ import (
 	"github.com/voziv/advent-of-code-2023/internal/math"
 	"github.com/voziv/advent-of-code-2023/internal/util"
 	"strings"
+	"sync"
 )
 
 type result struct {
@@ -103,70 +104,42 @@ func solveLikeAGhost(inputFileName string) result {
 		}{left: left, right: right}
 	}
 
-	//fmt.Println(travellingNodes)
+	stepsToFirstZ := make([]int, len(travellingNodes))
 
-	countZ := 0
-	greatestZ := 0
-	zStepsByIndex := make([]int, len(travellingNodes))
-	for i := 0; i < len(zStepsByIndex); i++ {
-		zStepsByIndex[i] = 0
-	}
-	for countZ != len(travellingNodes) {
-		for _, direction := range directions {
-			result.steps++
-			//if result.steps > 1000000000 {
-			//	panic("Steps exceeded 1,000,000,000")
-			//}
+	var wg sync.WaitGroup
 
-			countZ = 0
-			for i, node := range travellingNodes {
-				if direction == "L" {
-					travellingNodes[i] = nodes[node].left
-				} else {
-					travellingNodes[i] = nodes[node].right
-				}
+	for i := 0; i < len(travellingNodes); i++ {
+		wg.Add(1)
 
-				if travellingNodes[i][2:] == "Z" {
-					if zStepsByIndex[i] == 0 {
-						zStepsByIndex[i] = result.steps
-						//fmt.Printf("%v after %d steps\n", travellingNodes[i], result.steps)
-						hasZeros := false
-						totalSteps := 1
-						for i := 0; i < len(zStepsByIndex); i++ {
-							if zStepsByIndex[i] == 0 {
-								hasZeros = true
-								break
-							}
-							totalSteps *= zStepsByIndex[i]
-						}
+		i := i
+		go func() {
+			defer wg.Done()
 
-						if !hasZeros {
-							//fmt.Println("All nodes have found a minimum number of steps to get Z")
-							//fmt.Println(totalSteps)
+			foundZ := false
 
-							numSteps := math.Lcm(zStepsByIndex[0], zStepsByIndex[1:])
+			for foundZ == false {
+				for _, direction := range directions {
+					stepsToFirstZ[i]++
 
-							//fmt.Println("LCM")
-							//fmt.Println(numSteps)
-
-							result.steps = numSteps
-							return result
-						}
+					if direction == "L" {
+						travellingNodes[i] = nodes[travellingNodes[i]].left
+					} else {
+						travellingNodes[i] = nodes[travellingNodes[i]].right
 					}
-					countZ++
+
+					if travellingNodes[i][2:] == "Z" {
+						foundZ = true
+						break
+					}
 				}
 			}
+		}()
 
-			if countZ > greatestZ {
-				greatestZ = countZ
-				//fmt.Printf("%v - %d nodes ending in Z after %d steps\n", travellingNodes, countZ, result.steps)
-			}
-
-			if countZ == len(travellingNodes) {
-				break
-			}
-		}
 	}
+	wg.Wait()
 
+	numSteps := math.Lcm(stepsToFirstZ[0], stepsToFirstZ[1:])
+	result.steps = numSteps
 	return result
+
 }
