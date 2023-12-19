@@ -7,21 +7,25 @@ import (
 
 type result struct {
 	partOne int
+	partTwo int
 }
 
 func Run() {
 	util.AssertResult("example.txt", run("./internal/days/day09/example.txt"), result{
 		partOne: 114,
+		partTwo: 2,
 	})
 
 	util.AssertResult("input.txt", run("./internal/days/day09/input.txt"), result{
 		partOne: 2174807968,
+		partTwo: 1208,
 	})
 }
 
 func run(inputFileName string) result {
 	result := result{
 		partOne: 0,
+		partTwo: 0,
 	}
 
 	lines := util.GetFileContents(inputFileName)
@@ -62,15 +66,33 @@ func run(inputFileName string) result {
 
 	for _, tree := range trees {
 		//printTree(tree)
-		extrapolateTree(tree)
+		extrapolateRight(tree)
+		extrapolateLeft(tree)
 		//printTree(tree)
 		result.partOne += tree[0][len(tree[0])-1]
+		result.partTwo += tree[0][0]
 	}
 
 	return result
 }
 
-func extrapolateTree(tree [][]int) {
+func extrapolateLeft(tree [][]int) {
+	for i := len(tree) - 1; i >= 0; i-- {
+		newSlice := []int{0}
+		newSlice = append(newSlice, tree[i]...)
+		tree[i] = newSlice
+	}
+
+	for row := len(tree) - 1; row >= 1; row-- {
+		cell := 0
+		parentRow := row - 1
+		leftParent := cell
+		rightParent := cell + 1
+		tree[parentRow][leftParent] = tree[parentRow][rightParent] - tree[row][cell]
+	}
+}
+
+func extrapolateRight(tree [][]int) {
 	for i := len(tree) - 1; i >= 0; i-- {
 		tree[i] = append(tree[i], 0)
 	}
